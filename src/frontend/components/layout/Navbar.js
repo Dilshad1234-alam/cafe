@@ -26,13 +26,14 @@ export default function Navbar() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
     
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

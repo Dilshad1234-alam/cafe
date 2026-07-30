@@ -17,6 +17,7 @@ export default function MenuSearch() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
@@ -24,8 +25,10 @@ export default function MenuSearch() {
   // Only sync if currentSearch is cleared to prevent cursor jumping while typing
   useEffect(() => {
     if (currentSearch === "" && inputValue !== "") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setInputValue("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSearch]);
 
   // Push to URL when debounced search changes

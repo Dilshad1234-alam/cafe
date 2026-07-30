@@ -74,7 +74,7 @@ export default function ProductCard({ product }) {
       {/* Content */}
       <div className="p-4 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-1">
-          <Link href={`/menu/product/${product.slug}`} className="hover:text-brand-yellow transition-colors line-clamp-1">
+          <Link href={`/menu/${product.slug}`} prefetch={false} className="hover:text-brand-yellow transition-colors line-clamp-1">
             <h3 className="font-bold text-brand-charcoal text-lg leading-tight">{product.name}</h3>
           </Link>
           <div className="flex items-center gap-1 bg-brand-yellow/10 px-1.5 py-0.5 rounded text-sm shrink-0">

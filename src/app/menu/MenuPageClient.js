@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import MenuHero from "@/frontend/components/menu/MenuHero";
 import MenuSearch from "@/frontend/components/menu/MenuSearch";
@@ -32,8 +32,12 @@ export default function MenuPageClient() {
     setVisibleCount(prev => prev + 8);
   };
 
+  const [isPending, startTransition] = useTransition();
+
   const handleClearFilters = () => {
-    router.push("/menu", { scroll: false });
+    startTransition(() => {
+      router.push("/menu", { scroll: false });
+    });
   };
 
   const visibleProducts = products.slice(0, visibleCount);

@@ -1,19 +1,23 @@
 import Image from "next/image";
 import { siteConfig } from "@/frontend/data/siteConfig";
 
+const InstagramIcon = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+  </svg>
+);
+
 export default function InstagramGallery() {
   const posts = [
-    { id: 1, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80", alt: "Delicious Burger" },
-    { id: 2, image: "https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&q=80", alt: "Crispy Fries" },
-    { id: 3, image: "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?auto=format&fit=crop&q=80", alt: "Spicy Momos" },
-    { id: 4, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80", alt: "Cheese Pizza" },
-    { id: 5, image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80", alt: "Cold Coffee" },
-    { id: 6, image: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&q=80", alt: "Cafe Offer" },
+    { id: 1, image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=600", alt: "Delicious Burger" },
+    { id: 2, image: "https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&q=80&w=600", alt: "Crispy Fries" },
+    { id: 3, image: "https://images.unsplash.com/photo-1626776876729-bab4369a5a5a?auto=format&fit=crop&q=80&w=600", alt: "Spicy Momos" },
+    { id: 4, image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=600", alt: "Cheese Pizza" },
+    { id: 5, image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=600", alt: "Cold Coffee" },
+    { id: 6, image: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&q=80&w=600", alt: "Cafe Offer" },
   ];
-
-  const InstagramIcon = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-  );
 
   return (
     <section className="py-20 bg-white overflow-hidden">

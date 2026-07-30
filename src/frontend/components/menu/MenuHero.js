@@ -5,7 +5,7 @@ export default function MenuHero() {
   return (
     <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-brand-charcoal overflow-hidden border-b border-white/5">
       {/* Decorative subtle background overlay */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80')] opacity-5 bg-cover bg-center pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200')] opacity-5 bg-cover bg-center pointer-events-none"></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         {/* Breadcrumb */}

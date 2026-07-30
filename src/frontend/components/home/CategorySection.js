@@ -24,6 +24,7 @@ export default function CategorySection() {
             <Link 
               key={category.id} 
               href={`/menu?category=${category.slug}`}
+              prefetch={false}
               className="group flex flex-col items-center min-w-[120px] sm:min-w-0"
             >
               <div className="relative w-24 h-24 sm:w-full sm:aspect-square mb-4 rounded-full overflow-hidden border-4 border-gray-50 shadow-md group-hover:border-brand-yellow group-hover:shadow-brand-yellow/20 transition-all duration-300 group-hover:-translate-y-2">

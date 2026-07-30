@@ -70,7 +70,7 @@ export default function HeroSection() {
             <div className="relative w-full aspect-square max-w-[500px] mx-auto">
               <div className="absolute inset-0 bg-brand-yellow rounded-full scale-[0.85] shadow-2xl shadow-brand-yellow/30"></div>
               <Image 
-                src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80"
+                src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=800"
                 alt="Delicious classic veg burger"
                 fill
                 className="object-cover rounded-full p-2"

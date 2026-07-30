@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import MenuPageClient from "./MenuPageClient";
 
 export const metadata = {
@@ -6,7 +7,9 @@ export const metadata = {
 };
 
 export default function MenuPage() {
-  // We keep the main page as a Server Component for SEO and basic layout,
-  // and load the interactive client portion.
-  return <MenuPageClient />;
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading menu...</div>}>
+      <MenuPageClient />
+    </Suspense>
+  );
 }
