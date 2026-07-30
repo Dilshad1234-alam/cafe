@@ -9,7 +9,8 @@ export default function PopularProducts() {
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-brand-charcoal mb-4">Our Popular Dishes</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Handpicked favorites from our menu that our customers can't get enough of.
+            Our most loved dishes that keep our customers coming back for more. 
+            Don&apos;t miss out on these cafe favorites!
           </p>
         </div>
 

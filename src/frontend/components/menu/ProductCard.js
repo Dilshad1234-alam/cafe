@@ -10,7 +10,15 @@ export default function ProductCard({ product }) {
   const addItem = useCartStore((state) => state.addItem);
 
   const handleAddToCart = () => {
-    addItem(product);
+    // Determine default config
+    const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes[0] : null;
+    
+    addItem(product, 1, {
+      selectedSize: defaultSize,
+      selectedAddOns: [], // default no add-ons
+      configuredUnitPrice: product.salePrice || product.originalPrice // handled in cartStore logic, but we pass default
+    });
+    
     toast.success(`${product.name} added to cart!`);
   };
 

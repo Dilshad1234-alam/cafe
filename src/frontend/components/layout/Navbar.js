@@ -25,6 +25,7 @@ export default function Navbar() {
   const cartItemsCount = useCartStore((state) => state.getTotalItems());
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     setMounted(true);
     
     const handleScroll = () => {

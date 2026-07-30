@@ -20,7 +20,7 @@ export default function WhyChooseUs() {
     {
       icon: <HeartHandshake className="w-8 h-8 text-brand-yellow" />,
       title: "Affordable Combos",
-      description: "Premium taste doesn't have to be expensive. Explore our budget-friendly combos."
+      description: "Premium taste doesn&apos;t have to be expensive. Explore our budget-friendly combos."
     }
   ];
 
@@ -33,7 +33,7 @@ export default function WhyChooseUs() {
         <div className="text-center mb-16">
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-brand-yellow mb-4">Why Choose Us?</h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            We don't just serve food; we serve happiness on a plate. Here is what makes The Tasty Zone special.
+            We don&apos;t just serve food; we serve happiness on a plate. Here is what makes The Tasty Zone special.
           </p>
         </div>
 

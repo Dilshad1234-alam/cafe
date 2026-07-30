@@ -9,7 +9,7 @@ export default function ReviewsSection() {
         <div className="text-center mb-16">
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-brand-charcoal mb-4">What Our Customers Say</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Don't just take our word for it. Here is what Gondia foodies have to say about us.
+            Don&apos;t just take our word for it. Here is what Gondia foodies have to say about us.
           </p>
         </div>
 
@@ -31,7 +31,7 @@ export default function ReviewsSection() {
               </div>
               
               <p className="text-gray-600 italic mb-6 flex-grow relative z-10 text-sm leading-relaxed">
-                "{review.text}"
+                &quot;{review.text}&quot;
               </p>
               
               <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-50">

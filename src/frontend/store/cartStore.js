@@ -1,37 +1,100 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { generateItemKey } from '@/frontend/utils/productPricing';
+
+// Helper to normalize legacy cart items to the new format
+const normalizeCartItems = (items) => {
+  if (!items || !Array.isArray(items)) return [];
+  
+  return items.map(item => {
+    // If it already has an itemKey, it's a new format item
+    if (item.itemKey) return item;
+    
+    // Otherwise, it's an old item. Generate a basic itemKey based on its id.
+    // The old items didn't have size or add-ons configurations.
+    const fallbackKey = generateItemKey(item.id);
+    
+    return {
+      ...item,
+      itemKey: fallbackKey,
+      selectedSize: null,
+      selectedAddOns: [],
+      // Ensure unitPrice is set for consistent totals calculation
+      unitPrice: item.unitPrice || item.salePrice || item.originalPrice
+    };
+  });
+};
 
 export const useCartStore = create(
   persist(
     (set, get) => ({
       items: [],
       
-      addItem: (product, quantity = 1) => {
+      addItem: (product, quantity = 1, config = null) => {
         set((state) => {
-          const existingItem = state.items.find((item) => item.id === product.id);
-          if (existingItem) {
-            return {
-              items: state.items.map((item) =>
-                item.id === product.id
-                  ? { ...item, quantity: item.quantity + quantity }
-                  : item
-              ),
+          // Extract configuration if provided
+          const selectedSize = config?.selectedSize || null;
+          const selectedAddOns = config?.selectedAddOns || [];
+          
+          // Determine the unit price. If configured, use it, otherwise fallback to product price
+          const unitPrice = config?.configuredUnitPrice || (product.salePrice || product.originalPrice);
+          
+          // Generate deterministic key
+          const itemKey = generateItemKey(
+            product.id, 
+            selectedSize?.id, 
+            selectedAddOns.map(a => a.id)
+          );
+
+          // Find if this exact configuration already exists in the cart
+          const existingItemIndex = state.items.findIndex(item => item.itemKey === itemKey);
+
+          if (existingItemIndex >= 0) {
+            // Update quantity of existing item
+            const newItems = [...state.items];
+            newItems[existingItemIndex] = {
+              ...newItems[existingItemIndex],
+              quantity: newItems[existingItemIndex].quantity + quantity
             };
+            return { items: newItems };
           }
-          return { items: [...state.items, { ...product, quantity }] };
+          
+          // Add as new cart item
+          const newItem = {
+            id: product.id,
+            slug: product.slug,
+            name: product.name,
+            image: product.image,
+            foodType: product.foodType,
+            quantity,
+            itemKey,
+            selectedSize,
+            selectedAddOns,
+            unitPrice
+          };
+
+          return { items: [...state.items, newItem] };
         });
       },
       
-      removeItem: (productId) => {
+      removeItem: (itemKey) => {
         set((state) => ({
-          items: state.items.filter((item) => item.id !== productId),
+          items: state.items.filter((item) => item.itemKey !== itemKey && item.id !== itemKey), // Fallback for old calls using `id`
         }));
       },
       
-      updateQuantity: (productId, quantity) => {
+      updateQuantity: (itemKey, quantity) => {
+        if (quantity <= 0) {
+          get().removeItem(itemKey);
+          return;
+        }
+        
         set((state) => ({
           items: state.items.map((item) =>
-            item.id === productId ? { ...item, quantity } : item
+            // Fallback for old calls using `id` if `itemKey` matches `id`
+            item.itemKey === itemKey || item.id === itemKey 
+              ? { ...item, quantity } 
+              : item
           ),
         }));
       },
@@ -44,13 +107,21 @@ export const useCartStore = create(
       
       getTotalPrice: () => {
         return get().items.reduce((total, item) => {
-          const price = item.salePrice || item.originalPrice;
+          // Use the stored unitPrice which accounts for sizes/addons, 
+          // or fallback for very old items
+          const price = item.unitPrice || item.salePrice || item.originalPrice;
           return total + price * item.quantity;
         }, 0);
       },
     }),
     {
       name: 'tasty-zone-cart',
+      // Migration/Normalization step on rehydration
+      onRehydrateStorage: () => (state) => {
+        if (state && state.items) {
+          state.items = normalizeCartItems(state.items);
+        }
+      },
     }
   )
 );

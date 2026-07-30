@@ -12,7 +12,7 @@ export default function OffersSection() {
           <div>
             <h2 className="font-serif text-3xl md:text-5xl font-bold text-brand-charcoal mb-4">Special Offers</h2>
             <p className="text-lg text-gray-600 max-w-xl">
-              Grab these amazing deals before they're gone! Best prices on your favorite meals.
+              Grab these amazing deals before they&apos;re gone! Best prices on your favorite meals.
             </p>
           </div>
           <Link 
