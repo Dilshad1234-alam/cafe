@@ -1,0 +1,114 @@
+[
+  {
+    "name": "Burger",
+    "slug": "burger",
+    "description": "Juicy, handcrafted burgers.",
+    "image": "https://ik.imagekit.io/Dilshad/Cafe/pexels-ramon-rangel-661975902-34407507.jpg",
+    "sortOrder": 1,
+    "isActive": true
+  },
+  {
+    "name": "Pizza",
+    "slug": "pizza",
+    "description": "Wood-fired oven pizzas.",
+    "image": "https://ik.imagekit.io/Dilshad/Cafe/pexels-sonali-mehta-1514525371-31596394.jpg",
+    "sortOrder": 2,
+    "isActive": true
+  },
+  {
+    "name": "Momos",
+    "slug": "momos",
+    "description": "Authentic steamed and fried momos.",
+    "image": "https://ik.imagekit.io/Dilshad/Cafe/pexels-anya-dunes-2153945617-33670191.jpg",
+    "sortOrder": 3,
+    "isActive": true
+  },
+  {
+    "name": "Sandwich",
+    "slug": "sandwich",
+    "description": "Grilled and fresh sandwiches.",
+    "image": "/images/categories/sandwich.jpg",
+    "sortOrder": 4,
+    "isActive": true
+  },
+  {
+    "name": "French Fries",
+    "slug": "french-fries",
+    "description": "Crispy and loaded fries.",
+    "image": "https://ik.imagekit.io/Dilshad/Cafe/pexels-roman-odintsov-5836999.jpg",
+    "sortOrder": 5,
+    "isActive": true
+  },
+  {
+    "name": "Pasta",
+    "slug": "pasta",
+    "description": "Rich and creamy Italian pastas.",
+    "image": "/images/categories/pasta.jpg",
+    "sortOrder": 6,
+    "isActive": true
+  },
+  {
+    "name": "Maggi",
+    "slug": "maggi",
+    "description": "Everyone's favorite noodles.",
+    "image": "/images/categories/maggi.jpg",
+    "sortOrder": 7,
+    "isActive": true
+  },
+  {
+    "name": "Wraps",
+    "slug": "wraps",
+    "description": "Flavorful wraps and rolls.",
+    "image": "/images/categories/wraps.jpg",
+    "sortOrder": 8,
+    "isActive": true
+  },
+  {
+    "name": "Coffee",
+    "slug": "coffee",
+    "description": "Hot and cold brewed coffees.",
+    "image": "https://ik.imagekit.io/Dilshad/Cafe/pexels-pervane-mustafa27-716709928-18281882.jpg",
+    "sortOrder": 9,
+    "isActive": true
+  },
+  {
+    "name": "Shakes",
+    "slug": "shakes",
+    "description": "Thick and creamy milkshakes.",
+    "image": "https://ik.imagekit.io/Dilshad/Cafe/pexels-minchephoto-7491905.jpg",
+    "sortOrder": 10,
+    "isActive": true
+  },
+  {
+    "name": "Mocktails",
+    "slug": "mocktails",
+    "description": "Refreshing fruit mocktails.",
+    "image": "/images/categories/mocktails.jpg",
+    "sortOrder": 11,
+    "isActive": true
+  },
+  {
+    "name": "Soft Drinks",
+    "slug": "soft-drinks",
+    "description": "Chilled beverages.",
+    "image": "/images/categories/soft-drinks.jpg",
+    "sortOrder": 12,
+    "isActive": true
+  },
+  {
+    "name": "Desserts",
+    "slug": "desserts",
+    "description": "Sweet treats to end your meal.",
+    "image": "/images/categories/desserts.jpg",
+    "sortOrder": 13,
+    "isActive": true
+  },
+  {
+    "name": "Combos",
+    "slug": "combos",
+    "description": "Value meals and combos.",
+    "image": "/images/categories/combos.jpg",
+    "sortOrder": 14,
+    "isActive": true
+  }
+]

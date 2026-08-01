@@ -2,7 +2,7 @@ export const categories = [
   {
     id: "cat_1",
     name: "Burgers",
-    slug: "burgers",
+    slug: "burger",
     label: "Juicy & Fresh",
     icon: "🍔",
     image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800"
@@ -34,7 +34,7 @@ export const categories = [
   {
     id: "cat_5",
     name: "Cold Coffee",
-    slug: "cold-coffee",
+    slug: "coffee",
     label: "Refreshing",
     icon: "🥤",
     image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=800"
