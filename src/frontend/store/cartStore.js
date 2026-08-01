@@ -84,16 +84,34 @@ export const useCartStore = create(
       },
       
       updateQuantity: (itemKey, quantity) => {
-        if (quantity <= 0) {
-          get().removeItem(itemKey);
-          return;
-        }
+        // Enforce boundaries
+        const boundedQuantity = Math.max(1, Math.min(20, quantity));
         
         set((state) => ({
           items: state.items.map((item) =>
             // Fallback for old calls using `id` if `itemKey` matches `id`
             item.itemKey === itemKey || item.id === itemKey 
-              ? { ...item, quantity } 
+              ? { ...item, quantity: boundedQuantity } 
+              : item
+          ),
+        }));
+      },
+
+      incrementQuantity: (itemKey) => {
+        set((state) => ({
+          items: state.items.map((item) =>
+            (item.itemKey === itemKey || item.id === itemKey) && item.quantity < 20
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          ),
+        }));
+      },
+
+      decrementQuantity: (itemKey) => {
+        set((state) => ({
+          items: state.items.map((item) =>
+            (item.itemKey === itemKey || item.id === itemKey) && item.quantity > 1
+              ? { ...item, quantity: item.quantity - 1 }
               : item
           ),
         }));
@@ -105,6 +123,8 @@ export const useCartStore = create(
         return get().items.reduce((total, item) => total + item.quantity, 0);
       },
       
+      getTotalQuantity: () => get().getTotalItems(), // Alias for new modules
+      
       getTotalPrice: () => {
         return get().items.reduce((total, item) => {
           // Use the stored unitPrice which accounts for sizes/addons, 
@@ -113,6 +133,8 @@ export const useCartStore = create(
           return total + price * item.quantity;
         }, 0);
       },
+
+      getSubtotal: () => get().getTotalPrice(), // Alias for new modules
     }),
     {
       name: 'tasty-zone-cart',
