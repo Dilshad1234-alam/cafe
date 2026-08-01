@@ -1,15 +1,21 @@
 "use client";
 
 import { useCartStore } from "@/frontend/store/cartStore";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CartClearDialog from "./CartClearDialog";
 
 export default function CartHeader() {
   const totalQuantity = useCartStore((state) => state.getTotalQuantity());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Avoid hydration mismatch by checking if there's quantity > 0
-  if (totalQuantity === 0) return null;
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Avoid hydration mismatch
+  if (!isMounted || totalQuantity === 0) return null;
 
   return (
     <>

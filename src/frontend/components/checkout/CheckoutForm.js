@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useForm as useReactHookForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { useCartStore } from "@/frontend/store/cartStore";
 import { useAuth } from "@/frontend/hooks/useAuth";
 import { checkoutSchema } from "@/frontend/validation/checkoutSchema";
+
+import { createOrder } from "@/frontend/services/orderService";
 
 import CheckoutEmptyState from "./CheckoutEmptyState";
 import ContactDetailsForm from "./ContactDetailsForm";
@@ -27,6 +29,7 @@ export default function CheckoutForm() {
   const items = useCartStore((state) => state.items);
   const totalQuantity = useCartStore((state) => state.getTotalQuantity());
   const subtotal = useCartStore((state) => state.getSubtotal());
+  const clearCart = useCartStore((state) => state.clearCart);
   
   // Validation checks
   const hasUnavailableItems = items.some(item => item.isAvailable === false);
@@ -108,37 +111,51 @@ export default function CheckoutForm() {
       items: items.map(item => ({
         itemKey: item.itemKey,
         productId: item.id,
-        slug: item.slug,
+        slug: item.slug || "",
         name: item.name,
-        selectedSize: item.selectedSize,
-        selectedAddOns: item.selectedAddOns,
-        unitPrice: item.unitPrice || item.salePrice || item.originalPrice,
+        selectedSize: item.selectedSize || null,
+        selectedAddOns: item.selectedAddOns || [],
+        unitPrice: item.unitPrice || item.salePrice || item.originalPrice || 0,
         quantity: item.quantity,
-        itemTotal: (item.unitPrice || item.salePrice || item.originalPrice) * item.quantity
-      })),
-      pricing: {
-        subtotal,
-        deliveryFee: null, // To be determined by backend
-        tax: null, // To be determined by backend
-        total: subtotal // Frontend estimate only
-      }
+        itemTotal: (item.unitPrice || item.salePrice || item.originalPrice || 0) * item.quantity
+      }))
     };
 
-    console.log("Checkout Payload Ready:", orderPayload);
-
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Success response for this phase
-    toast.success("Checkout details are ready. Order API integration is the next step.", {
-      duration: 5000,
-    });
-    
-    // Note: Intentionally NOT clearing the cart or redirecting in this phase 
-    // as per strict instructions: "Do not create a database order. Do not clear the cart."
+    try {
+      const response = await createOrder(orderPayload);
+      
+      toast.success(response.message || "Order placed successfully!");
+      
+      // Clear cart only on success
+      clearCart();
+      
+      // Navigate to success page
+      let successUrl = `/order-success/${response.order.orderNumber}`;
+      if (response.guestAccessToken) {
+        successUrl += `?guestToken=${encodeURIComponent(response.guestAccessToken)}`;
+      }
+      
+      router.push(successUrl);
+    } catch (error) {
+      console.error("Order submission error:", error);
+      toast.error(error.message || "Failed to place order. Please try again.");
+    }
   };
 
-  // Block rendering if cart is invalid
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Block rendering if cart is invalid or not yet mounted to prevent hydration mismatch
+  if (!isMounted) {
+    return (
+      <div className="min-h-[50vh] flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-brand-charcoal border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   if (totalQuantity === 0) {
     return <CheckoutEmptyState />;
   }
