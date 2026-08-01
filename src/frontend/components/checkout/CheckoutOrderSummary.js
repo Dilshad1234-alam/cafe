@@ -3,10 +3,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Edit2, Loader2 } from "lucide-react";
+import { useSettingsStore } from "@/frontend/store/settingsStore";
 
 export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, orderType }) {
+  const { settings } = useSettingsStore();
+  
   // Frontend calculated total
-  const grandTotal = subtotal;
+  const deliveryFee = settings?.ordering?.deliveryFee || 0;
+  const freeDeliveryThreshold = settings?.ordering?.freeDeliveryThreshold;
+  
+  let actualDeliveryFee = 0;
+  if (orderType === "delivery") {
+    actualDeliveryFee = (freeDeliveryThreshold && subtotal >= freeDeliveryThreshold) ? 0 : deliveryFee;
+  }
+  
+  const taxPercentage = settings?.ordering?.taxPercentage || 0;
+  const taxAmount = (subtotal * taxPercentage) / 100;
+  
+  const grandTotal = subtotal + actualDeliveryFee + taxAmount;
 
   return (
     <div className="bg-brand-charcoal text-white rounded-[2rem] p-6 sm:p-8 shadow-xl sticky top-24">
@@ -66,11 +80,17 @@ export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, or
         </div>
         <div className="flex justify-between text-gray-300 text-sm">
           <span>Delivery</span>
-          <span className="italic text-brand-yellow/80">Calculated when order is confirmed</span>
+          {orderType === "takeaway" ? (
+            <span className="text-white font-bold">₹0</span>
+          ) : (
+            <span className="font-bold text-white">
+              {actualDeliveryFee === 0 ? "Free" : `₹${actualDeliveryFee}`}
+            </span>
+          )}
         </div>
         <div className="flex justify-between text-gray-300 text-sm">
-          <span>Taxes</span>
-          <span className="italic">Included where applicable</span>
+          <span>Taxes ({taxPercentage}%)</span>
+          <span className="font-bold text-white">₹{taxAmount.toFixed(2)}</span>
         </div>
       </div>
       

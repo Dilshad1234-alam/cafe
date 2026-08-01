@@ -2,8 +2,17 @@
 
 import { Bike, ShoppingBag } from "lucide-react";
 import { siteConfig } from "@/frontend/data/siteConfig";
+import { useSettingsStore } from "@/frontend/store/settingsStore";
 
 export default function OrderTypeSelector({ orderType, setValue }) {
+  const { settings } = useSettingsStore();
+  const address = settings?.business?.addressLine || siteConfig.address;
+  
+  const isDeliveryEnabled = settings ? settings.ordering?.deliveryEnabled : true;
+  const isTakeawayEnabled = settings ? settings.ordering?.takeawayEnabled : true;
+  
+  // If no delivery/takeaway enabled (shouldn't happen but just in case)
+  if (!isDeliveryEnabled && !isTakeawayEnabled) return null;
   return (
     <div className="bg-white rounded-[2rem] p-6 sm:p-8 shadow-sm border border-gray-100 mb-8">
       <h2 className="font-serif text-2xl font-bold text-brand-charcoal mb-6 border-b border-gray-100 pb-4">
@@ -13,6 +22,7 @@ export default function OrderTypeSelector({ orderType, setValue }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         
         {/* Delivery Option */}
+        {isDeliveryEnabled && (
         <button
           type="button"
           onClick={() => setValue("orderType", "delivery")}
@@ -39,8 +49,10 @@ export default function OrderTypeSelector({ orderType, setValue }) {
             {orderType === "delivery" && <div className="w-2.5 h-2.5 rounded-full bg-brand-yellow"></div>}
           </div>
         </button>
+        )}
 
         {/* Takeaway Option */}
+        {isTakeawayEnabled && (
         <button
           type="button"
           onClick={() => setValue("orderType", "takeaway")}
@@ -67,6 +79,7 @@ export default function OrderTypeSelector({ orderType, setValue }) {
             {orderType === "takeaway" && <div className="w-2.5 h-2.5 rounded-full bg-brand-yellow"></div>}
           </div>
         </button>
+        )}
         
       </div>
 
@@ -75,7 +88,7 @@ export default function OrderTypeSelector({ orderType, setValue }) {
           <div className="w-6 h-6 shrink-0 text-gray-400 mt-0.5">📍</div>
           <div>
             <h4 className="font-bold text-gray-900 text-sm">Pickup Location</h4>
-            <p className="text-sm text-gray-600 mt-1">{siteConfig.address}</p>
+            <p className="text-sm text-gray-600 mt-1">{address}</p>
           </div>
         </div>
       )}

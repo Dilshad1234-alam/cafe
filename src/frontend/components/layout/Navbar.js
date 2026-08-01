@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { siteConfig } from "@/frontend/data/siteConfig";
 import { useAuth } from "@/frontend/hooks/useAuth";
 import { useCartStore } from "@/frontend/store/cartStore";
+import { useSettingsStore } from "@/frontend/store/settingsStore";
 import { 
   Menu, X, ShoppingCart, User, LogOut, Loader2, 
   ChevronDown, LayoutDashboard, ShoppingBag, Utensils
@@ -23,6 +24,11 @@ export default function Navbar() {
   const { user, isAuthenticated, isLoading: authLoading, logout } = useAuth();
   // Hydration safe cart count
   const cartItemsCount = useCartStore((state) => state.getTotalItems());
+  const { settings } = useSettingsStore();
+
+  const businessName = settings?.business?.shortName || settings?.business?.name || siteConfig.shortName;
+  const whatsappUrl = settings?.social?.whatsappNumber ? `https://wa.me/${settings.social.whatsappNumber}` : siteConfig.links.whatsapp;
+  const phoneUrl = settings?.business?.phone ? `tel:${settings.business.phone.replace(/[^0-9+]/g, '')}` : siteConfig.links.phone;
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,13 +64,19 @@ export default function Navbar() {
   const isActive = (path) => pathname === path;
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-white/95 backdrop-blur-md shadow-sm py-3" 
-          : "bg-white py-4"
-      }`}
-    >
+    <>
+      {settings?.appearance?.announcementEnabled && settings?.appearance?.announcementText && (
+        <div className="bg-brand-yellow text-brand-charcoal text-center py-2 px-4 text-sm font-bold">
+          {settings.appearance.announcementText}
+        </div>
+      )}
+      <header 
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled 
+            ? "bg-white/95 backdrop-blur-md shadow-sm py-3" 
+            : "bg-white py-4"
+        }`}
+      >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           
@@ -74,7 +86,7 @@ export default function Navbar() {
               <Utensils className="w-5 h-5" />
             </div>
             <span className="font-serif font-bold text-2xl text-brand-charcoal tracking-tight hidden sm:block">
-              {siteConfig.shortName}
+              {businessName}
             </span>
           </Link>
 
@@ -313,7 +325,7 @@ export default function Navbar() {
           {/* Mobile CTA */}
           <div className="pt-2">
             <a 
-              href={siteConfig.links.phone}
+              href={phoneUrl}
               className="flex justify-center items-center gap-2 w-full py-4 bg-brand-yellow text-brand-charcoal font-bold rounded-xl shadow-lg shadow-brand-yellow/30"
             >
               Order Now
@@ -322,5 +334,6 @@ export default function Navbar() {
         </div>
       </div>
     </header>
+    </>
   );
 }

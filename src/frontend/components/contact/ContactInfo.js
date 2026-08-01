@@ -2,8 +2,21 @@
 
 import { MapPin, Phone, Mail, ShoppingBag, Truck } from "lucide-react";
 import { siteConfig } from "@/frontend/data/siteConfig";
+import { useSettingsStore } from "@/frontend/store/settingsStore";
 
 export default function ContactInfo() {
+  const { settings } = useSettingsStore();
+
+  const businessName = settings?.business?.name || siteConfig.name;
+  const address = settings?.business?.addressLine || siteConfig.address;
+  const phone = settings?.business?.phone || siteConfig.phone;
+  const phoneUrl = settings?.business?.phone ? `tel:${settings.business.phone.replace(/[^0-9+]/g, '')}` : siteConfig.links.phone;
+  const email = settings?.business?.email || "hello@thetastyzone.com";
+  const whatsappUrl = settings?.social?.whatsappNumber ? `https://wa.me/${settings.social.whatsappNumber}` : siteConfig.links.whatsapp;
+  const googleMapsUrl = settings?.social?.googleMapsUrl || siteConfig.links.googleMaps;
+
+  const isTakeawayEnabled = settings ? settings.ordering?.takeawayEnabled : true;
+  const isDeliveryEnabled = settings ? settings.ordering?.deliveryEnabled : true;
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +26,7 @@ export default function ContactInfo() {
           {/* Main Info Card */}
           <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 flex flex-col h-full">
             <h2 className="font-serif text-3xl font-bold text-brand-charcoal mb-8">
-              {siteConfig.name}
+              {businessName}
             </h2>
 
             <div className="space-y-6 mb-8 flex-grow">
@@ -23,7 +36,7 @@ export default function ContactInfo() {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Address</h3>
-                  <p className="text-gray-600 leading-relaxed">{siteConfig.address}</p>
+                  <p className="text-gray-600 leading-relaxed">{address}</p>
                 </div>
               </div>
 
@@ -33,7 +46,7 @@ export default function ContactInfo() {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Phone</h3>
-                  <p className="text-gray-600">{siteConfig.formattedPhone}</p>
+                  <p className="text-gray-600">{phone}</p>
                 </div>
               </div>
 
@@ -43,39 +56,42 @@ export default function ContactInfo() {
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Email</h3>
-                  <p className="text-gray-600">hello@thetastyzone.com</p>
+                  <p className="text-gray-600">{email}</p>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-100">
               <a 
-                href={siteConfig.links.phone}
+                href={phoneUrl}
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-brand-charcoal text-white rounded-xl font-bold hover:bg-gray-800 transition-colors"
               >
                 <Phone className="w-4 h-4" /> Call
               </a>
               <a 
-                href={siteConfig.links.whatsapp}
+                href={whatsappUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#25D366] text-white rounded-xl font-bold hover:bg-[#20bd5a] transition-colors"
               >
                 WhatsApp
               </a>
-              <a 
-                href={siteConfig.links.googleMaps}
-                target="_blank"
-                rel="noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-brand-charcoal rounded-xl font-bold hover:bg-gray-200 transition-colors"
-              >
-                <MapPin className="w-4 h-4" /> Directions
-              </a>
+              {googleMapsUrl && (
+                <a 
+                  href={googleMapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-brand-charcoal rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                >
+                  <MapPin className="w-4 h-4" /> Directions
+                </a>
+              )}
             </div>
           </div>
 
           {/* Availability Card */}
           <div className="flex flex-col gap-8">
+            {isTakeawayEnabled && (
             <div className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center flex-shrink-0">
                 <ShoppingBag className="w-8 h-8" />
@@ -85,7 +101,9 @@ export default function ContactInfo() {
                 <p className="text-gray-500">Pick up your fresh order directly from the cafe.</p>
               </div>
             </div>
+            )}
 
+            {isDeliveryEnabled && (
             <div className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-gray-100 flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center flex-shrink-0">
                 <Truck className="w-8 h-8" />
@@ -95,6 +113,7 @@ export default function ContactInfo() {
                 <p className="text-gray-500">Fast delivery straight to your doorstep.</p>
               </div>
             </div>
+            )}
           </div>
 
         </div>

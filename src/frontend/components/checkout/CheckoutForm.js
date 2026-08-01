@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/frontend/store/cartStore";
 import { useAuth } from "@/frontend/hooks/useAuth";
+import { useSettingsStore } from "@/frontend/store/settingsStore";
 import { checkoutSchema } from "@/frontend/validation/checkoutSchema";
 
 import { createOrder } from "@/frontend/services/orderService";
@@ -35,6 +36,9 @@ export default function CheckoutForm() {
   const hasUnavailableItems = items.some(item => item.isAvailable === false);
   const isCartReady = totalQuantity > 0 && !hasUnavailableItems;
 
+  const { settings } = useSettingsStore();
+  const defaultOrderType = settings?.ordering?.deliveryEnabled === false ? "takeaway" : "delivery";
+
   // React Hook Form Setup
   const {
     register,
@@ -51,7 +55,7 @@ export default function CheckoutForm() {
         phone: "",
         email: ""
       },
-      orderType: "delivery",
+      orderType: defaultOrderType,
       deliveryAddress: {
         house: "",
         area: "",
@@ -86,7 +90,7 @@ export default function CheckoutForm() {
           phone: user.phone || "",
           email: user.email || ""
         },
-        orderType: "delivery",
+        orderType: defaultOrderType,
         deliveryAddress: {
           house: "",
           area: "",
