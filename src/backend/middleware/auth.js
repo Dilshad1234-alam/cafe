@@ -1,5 +1,6 @@
 import "server-only";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { verifyAuthToken } from "@/backend/utils/authToken";
 import { AUTH_COOKIE_NAME } from "@/backend/config/authConfig";
 import { getUserById, sanitizeUser } from "@/backend/services/authService";
@@ -32,16 +33,39 @@ export async function getAuthenticatedUser() {
 export async function requireAuthenticatedUser() {
   const user = await getAuthenticatedUser();
   if (!user) {
-    throw new Error("Unauthorized");
+    // If it's an API request, we probably want to return 401 instead of redirect, 
+    // but the Next.js standard `redirect` throws a NEXT_REDIRECT error which is caught.
+    // For now, we will handle redirect for standard page requests.
+    const headersList = await headers();
+    const accept = headersList.get("accept");
+    if (accept && accept.includes("application/json")) {
+      throw new Error("Authentication required");
+    }
+    redirect("/login");
   }
   return user;
 }
 
 export async function requireAdminUser() {
-  const user = await requireAuthenticatedUser();
+  const user = await getAuthenticatedUser();
+  
+  if (!user) {
+    const headersList = await headers();
+    const accept = headersList.get("accept");
+    if (accept && accept.includes("application/json")) {
+      throw new Error("Authentication required");
+    }
+    redirect("/login?redirect=/admin");
+  }
+
   // We check the latest database role directly from the sanitized user object
   if (user.role !== "admin") {
-    throw new Error("Forbidden");
+    const headersList = await headers();
+    const accept = headersList.get("accept");
+    if (accept && accept.includes("application/json")) {
+      throw new Error("Forbidden");
+    }
+    redirect("/");
   }
   return user;
 }

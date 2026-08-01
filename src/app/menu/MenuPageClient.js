@@ -14,8 +14,8 @@ import { useMenuFilters } from "@/frontend/hooks/useMenuFilters";
 import { RefreshCw } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export default function MenuPageClient() {
-  const { products, totalResults } = useMenuFilters();
+export default function MenuPageClient({ initialProducts = [], initialCategories = [] }) {
+  const { products, totalResults } = useMenuFilters(initialProducts);
   const searchParams = useSearchParams();
   const router = useRouter();
   
@@ -50,7 +50,7 @@ export default function MenuPageClient() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 mb-8 border border-gray-100">
           <MenuSearch />
-          <CategoryFilter />
+          <CategoryFilter categories={initialCategories} />
         </div>
       </div>
 

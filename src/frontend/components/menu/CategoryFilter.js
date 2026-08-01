@@ -2,9 +2,8 @@
 
 import { useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { categories } from "@/frontend/data/categories";
 
-export default function CategoryFilter() {
+export default function CategoryFilter({ categories = [] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentCategory = searchParams.get("category") || "all";

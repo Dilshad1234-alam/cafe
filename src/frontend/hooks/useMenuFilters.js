@@ -1,8 +1,6 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { menuProducts } from '@/frontend/data/menuProducts';
-
-export function useMenuFilters() {
+export function useMenuFilters(initialProducts = []) {
   const searchParams = useSearchParams();
 
   // Read URL parameters safely
@@ -16,7 +14,7 @@ export function useMenuFilters() {
 
   // Compute filtered and sorted products
   const filteredProducts = useMemo(() => {
-    let result = [...menuProducts];
+    let result = [...initialProducts];
 
     // 1. Filter by Availability (always exclude unavailable items from listings)
     result = result.filter(item => item.isAvailable !== false);
@@ -104,7 +102,8 @@ export function useMenuFilters() {
     priceParam,
     sortParam,
     popularOnly,
-    offersOnly
+    offersOnly,
+    initialProducts
   ]);
 
   return {
