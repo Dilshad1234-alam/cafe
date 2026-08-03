@@ -20,7 +20,7 @@ export default function LocationSection() {
   const googleMapsUrl = settings?.social?.googleMapsUrl || siteConfig.links.googleMaps;
   return (
     <section className="py-20 bg-brand-cream relative">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
         
         <div className="flex flex-col lg:flex-row gap-12 bg-white rounded-3xl overflow-hidden shadow-2xl shadow-brand-charcoal/5">
           

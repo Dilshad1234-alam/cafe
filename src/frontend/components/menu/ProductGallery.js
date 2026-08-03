@@ -1,17 +1,22 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
 
 export default function ProductGallery({ product, discount }) {
+  const [imgSrc, setImgSrc] = useState(product.image || "/images/placeholder.svg");
+
   // We can support multiple images later, for now we use the main image
   return (
-    <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden bg-gray-50 border border-gray-100">
+    <div className="relative w-full aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 flex items-center justify-center">
       <Image 
-        src={product.image}
+        src={imgSrc}
         alt={product.name}
         fill
         className="object-cover"
         sizes="(max-width: 768px) 100vw, 50vw"
         priority
         unoptimized
+        onError={() => setImgSrc("/images/placeholder.svg")}
       />
       
       {/* Badges Overlay */}

@@ -5,8 +5,8 @@ export async function fetchAdminCoupons(params = {}) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();
@@ -26,8 +26,8 @@ export async function fetchAdminCoupon(id) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();
@@ -47,8 +47,8 @@ export async function createAdminCoupon(couponData) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify(couponData),
   });
 
@@ -72,8 +72,8 @@ export async function updateAdminCoupon(id, couponData) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify(couponData),
   });
 
@@ -97,8 +97,8 @@ export async function updateAdminCouponStatus(id, isActive) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify({ isActive }),
   });
 
@@ -119,8 +119,8 @@ export async function deleteAdminCoupon(id) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();

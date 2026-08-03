@@ -4,7 +4,8 @@ export async function fetchDashboardMetrics() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
       },
       credentials: 'include', // Important to pass the HttpOnly auth cookie to the API route
     });

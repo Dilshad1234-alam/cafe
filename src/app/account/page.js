@@ -1,16 +1,15 @@
-import { requireAuthenticatedUser } from "@/backend/middleware/auth";
+"use client";
 import Link from "next/link";
 import { User, LogOut, MapPin, PackageSearch } from "lucide-react";
 import LogoutButton from "./LogoutButton";
+import { useAuth } from "@/frontend/hooks/useAuth";
+import AccountRouteGuard from "@/frontend/components/account/AccountRouteGuard";
 
-export const metadata = {
-  title: "My Account | The Tasty Zone Cafe",
-};
-
-export default async function AccountPage() {
-  const user = await requireAuthenticatedUser();
+export default function AccountPage() {
+  const { user } = useAuth();
 
   return (
+    <AccountRouteGuard>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">My Account</h1>
       
@@ -72,5 +71,6 @@ export default async function AccountPage() {
         </div>
       </div>
     </div>
+    </AccountRouteGuard>
   );
 }

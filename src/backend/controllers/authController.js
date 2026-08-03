@@ -104,16 +104,13 @@ export async function loginController(request) {
     // Create JWT
     const token = createAuthToken({ userId: user._id.toString(), role: user.role });
     
-    // Set cookie
-    const cookieStore = await cookies();
-    cookieStore.set(AUTH_COOKIE_NAME, token, getAuthCookieOptions());
-    
     return {
       status: 200,
       body: {
         success: true,
         message: "Login successful",
         user: sanitizeUser(user),
+        token,
       }
     };
   } catch (error) {
@@ -127,9 +124,6 @@ export async function loginController(request) {
 
 export async function logoutController() {
   try {
-    const cookieStore = await cookies();
-    cookieStore.delete(AUTH_COOKIE_NAME);
-    
     return {
       status: 200,
       body: {

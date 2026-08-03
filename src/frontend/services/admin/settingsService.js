@@ -4,8 +4,8 @@ export async function fetchAdminSettings() {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     cache: 'no-store'
   });
 
@@ -26,8 +26,8 @@ export async function updateAdminSettings(settingsData) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify(settingsData),
   });
 

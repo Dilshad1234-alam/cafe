@@ -9,7 +9,7 @@ export default function HeroSection() {
       {/* Background Decorative Blob */}
       <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[600px] h-[600px] bg-brand-yellow/20 rounded-full blur-3xl opacity-50 hidden md:block"></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
           
           {/* Left Text Content */}

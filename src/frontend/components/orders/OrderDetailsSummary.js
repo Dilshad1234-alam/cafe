@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from 'next/image';
+import SafeImage from '@/frontend/components/ui/SafeImage';
 
 export default function OrderDetailsSummary({ order }) {
   const { items, pricing, notes } = order;
@@ -12,9 +12,9 @@ export default function OrderDetailsSummary({ order }) {
         {items.map((item, idx) => (
           <div key={idx} className="flex gap-4 pb-6 border-b border-gray-100 last:border-0 last:pb-0">
             {/* Image Placeholder or Actual Image */}
-            <div className="w-20 h-20 bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden shrink-0 relative">
+            <div className="w-20 h-20 bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden shrink-0 relative flex items-center justify-center">
               {item.image ? (
-                <Image 
+                <SafeImage 
                   src={item.image} 
                   alt={item.name} 
                   fill 

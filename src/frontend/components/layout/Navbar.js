@@ -11,6 +11,7 @@ import {
   Menu, X, ShoppingCart, User, LogOut, Loader2, 
   ChevronDown, LayoutDashboard, ShoppingBag, Utensils
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,7 +27,7 @@ export default function Navbar() {
   const cartItemsCount = useCartStore((state) => state.getTotalItems());
   const { settings } = useSettingsStore();
 
-  const businessName = settings?.business?.shortName || settings?.business?.name || siteConfig.shortName;
+  const businessName = settings?.business?.name || siteConfig.name;
   const whatsappUrl = settings?.social?.whatsappNumber ? `https://wa.me/${settings.social.whatsappNumber}` : siteConfig.links.whatsapp;
   const phoneUrl = settings?.business?.phone ? `tel:${settings.business.phone.replace(/[^0-9+]/g, '')}` : siteConfig.links.phone;
 
@@ -77,13 +78,14 @@ export default function Navbar() {
             : "bg-white py-4"
         }`}
       >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
+          <div className="flex items-center justify-between">
           
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 shrink-0 group" onClick={closeMenu}>
-            <div className="w-10 h-10 rounded-full bg-brand-yellow flex items-center justify-center text-brand-charcoal group-hover:scale-105 transition-transform">
-              <Utensils className="w-5 h-5" />
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden flex items-center justify-center bg-white group-hover:scale-105 transition-transform">
+              {/* Replace /logo.png with the actual path to your logo if different */}
+              <img src="/ChatGPT%20Image%20Aug%203,%202026,%2012_19_52%20PM.png" alt="The Tasty Zone Logo" className="w-full h-full object-contain" />
             </div>
             <span className="font-serif font-bold text-2xl text-brand-charcoal tracking-tight hidden sm:block">
               {businessName}
@@ -113,7 +115,14 @@ export default function Navbar() {
               href="/cart" 
               className="relative p-2 text-gray-600 hover:text-brand-yellow transition-colors"
               aria-label="View cart"
-              onClick={closeMenu}
+              onClick={(e) => {
+                if (!isAuthenticated) {
+                  e.preventDefault();
+                  toast.info("Please login to view your cart.");
+                  router.push("/login");
+                }
+                closeMenu();
+              }}
             >
               <ShoppingCart className="w-6 h-6" />
               {mounted && cartItemsCount > 0 && (

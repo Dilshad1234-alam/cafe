@@ -6,8 +6,14 @@ import { AUTH_COOKIE_NAME } from "@/backend/config/authConfig";
 import { getUserById, sanitizeUser } from "@/backend/services/authService";
 
 export async function getAuthenticatedUser() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
+  const headersList = await headers();
+  const authHeader = headersList.get("authorization");
+  
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+  
+  const token = authHeader.substring(7);
   
   if (!token) {
     return null;

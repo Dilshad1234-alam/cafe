@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productSchema } from '@/backend/validations/productValidation';
 import { toast } from 'sonner';
-import { Loader2, ArrowLeft } from 'lucide-react';
+import { Loader2, ArrowLeft, Upload } from 'lucide-react';
 import { createAdminProduct, updateAdminProduct } from '@/frontend/services/admin/productService';
 import { fetchAdminCategories } from '@/frontend/services/admin/categoryService';
 import { useRouter } from 'next/navigation';
@@ -18,6 +18,7 @@ import TagsInput from './TagsInput';
 export default function ProductForm({ initialData = null }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [categories, setCategories] = useState([]);
   const isEditing = !!initialData;
 
@@ -27,7 +28,7 @@ export default function ProductForm({ initialData = null }) {
       .catch(err => toast.error("Failed to load categories"));
   }, []);
 
-  const { register, handleSubmit, control, formState: { errors }, watch } = useForm({
+  const { register, handleSubmit, control, setValue, formState: { errors }, watch } = useForm({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: initialData?.name || "",
@@ -69,6 +70,36 @@ export default function ProductForm({ initialData = null }) {
       }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setIsUploading(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Upload failed');
+      }
+
+      // Set the input value
+      setValue('imageUrl', data.url, { shouldValidate: true });
+      toast.success('Image uploaded successfully');
+    } catch (error) {
+      toast.error(error.message || 'Failed to upload image');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -147,11 +178,31 @@ export default function ProductForm({ initialData = null }) {
             
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1">Image URL</label>
-              <input 
-                {...register("imageUrl")}
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:bg-white transition-all text-sm"
-                placeholder="https://example.com/image.jpg"
-              />
+              <div className="flex gap-2">
+                <input 
+                  {...register("imageUrl")}
+                  className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-yellow focus:bg-white transition-all text-sm"
+                  placeholder="https://example.com/image.jpg"
+                />
+                <div className="relative shrink-0">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    disabled={isUploading}
+                    title="Upload Image"
+                  />
+                  <button 
+                    type="button" 
+                    disabled={isUploading}
+                    className="h-full px-4 py-2 bg-white border border-gray-200 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-50 transition-colors flex items-center gap-2"
+                  >
+                    {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                    Upload
+                  </button>
+                </div>
+              </div>
               {errors.imageUrl && <p className="text-red-500 text-xs mt-1 font-medium">{errors.imageUrl.message}</p>}
             </div>
           </div>

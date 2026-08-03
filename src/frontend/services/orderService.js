@@ -3,8 +3,8 @@ export const createOrder = async (checkoutData) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify(checkoutData),
   });
 
@@ -28,8 +28,8 @@ export const fetchOrderByNumber = async (orderNumber, guestToken = null) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await response.json();
@@ -51,8 +51,8 @@ export const fetchMyOrders = async (page = 1, limit = 10, status = null) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await response.json();
@@ -71,8 +71,8 @@ export const fetchMyOrderDetails = async (orderNumber) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await response.json();

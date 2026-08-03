@@ -3,9 +3,9 @@ export async function fetchAdminProducts(searchParams = new URLSearchParams()) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
   });
 
   const data = await response.json();
@@ -20,9 +20,9 @@ export async function fetchAdminProduct(id) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
   });
 
   const data = await response.json();
@@ -37,9 +37,9 @@ export async function createAdminProduct(productData) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify(productData),
   });
 
@@ -60,9 +60,9 @@ export async function updateAdminProduct(id, productData) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify(productData),
   });
 
@@ -83,9 +83,9 @@ export async function updateAdminProductAvailability(id, isAvailable) {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify({ isAvailable }),
   });
 
@@ -101,9 +101,9 @@ export async function updateAdminProductFeatured(id, isFeatured) {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify({ isFeatured }),
   });
 
@@ -119,9 +119,9 @@ export async function deleteAdminProduct(id) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
   });
 
   const data = await response.json();

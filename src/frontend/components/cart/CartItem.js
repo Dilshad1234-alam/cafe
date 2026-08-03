@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +8,7 @@ import { useCartStore } from "@/frontend/store/cartStore";
 
 export default function CartItem({ item }) {
   const { removeItem, incrementQuantity, decrementQuantity } = useCartStore();
+  const [imgSrc, setImgSrc] = useState(item.image || "/images/placeholder.svg");
 
   const isUnavailable = item.isAvailable === false;
   
@@ -24,13 +26,14 @@ export default function CartItem({ item }) {
     <div className={`p-4 sm:p-6 bg-white rounded-3xl border border-gray-100 shadow-sm flex flex-col sm:flex-row gap-4 sm:gap-6 ${isUnavailable ? 'opacity-70' : ''}`}>
       
       {/* Product Image */}
-      <div className="relative w-full sm:w-28 h-28 sm:h-auto shrink-0 bg-gray-50 rounded-2xl overflow-hidden border border-gray-100">
+      <div className="relative w-full sm:w-28 h-28 sm:h-auto shrink-0 bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 flex items-center justify-center">
         <Image 
-          src={item.image || "/window.svg"}
+          src={imgSrc}
           alt={item.name}
           fill
           className="object-cover"
           unoptimized
+          onError={() => setImgSrc("/images/placeholder.svg")}
         />
         {isUnavailable && (
           <div className="absolute inset-0 bg-white/60 flex items-center justify-center">

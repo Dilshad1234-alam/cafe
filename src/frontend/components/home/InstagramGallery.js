@@ -21,7 +21,7 @@ export default function InstagramGallery() {
 
   return (
     <section className="py-20 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 text-center">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20 mb-10 text-center">
         <a 
           href={siteConfig.links.instagram}
           target="_blank"

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import SafeImage from "@/frontend/components/ui/SafeImage";
 import Link from "next/link";
 import { Edit2, Loader2 } from "lucide-react";
 import { useSettingsStore } from "@/frontend/store/settingsStore";
@@ -44,8 +44,8 @@ export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, or
           
           return (
             <div key={item.itemKey} className="flex gap-4 items-start">
-              <div className="relative w-16 h-16 shrink-0 bg-white/5 rounded-xl overflow-hidden border border-white/10">
-                <Image 
+              <div className="relative w-16 h-16 shrink-0 bg-white/5 rounded-xl overflow-hidden border border-white/10 flex items-center justify-center">
+                <SafeImage 
                   src={item.image || "/window.svg"}
                   alt={item.name}
                   fill

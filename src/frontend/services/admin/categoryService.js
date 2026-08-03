@@ -3,9 +3,9 @@ export async function fetchAdminCategories(searchParams = new URLSearchParams())
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
   });
 
   const data = await response.json();
@@ -20,9 +20,9 @@ export async function fetchAdminCategory(id) {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
   });
 
   const data = await response.json();
@@ -37,9 +37,9 @@ export async function createAdminCategory(categoryData) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify(categoryData),
   });
 
@@ -60,9 +60,9 @@ export async function updateAdminCategory(id, categoryData) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify(categoryData),
   });
 
@@ -83,9 +83,9 @@ export async function updateAdminCategoryStatus(id, isActive) {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
     body: JSON.stringify({ isActive }),
   });
 
@@ -101,9 +101,9 @@ export async function deleteAdminCategory(id) {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: 'include',
   });
 
   const data = await response.json();

@@ -6,7 +6,7 @@ import { ChevronRight } from "lucide-react";
 export default function CategorySection() {
   return (
     <section className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
         
         <div className="flex justify-between items-end mb-8">
           <div>
@@ -19,7 +19,7 @@ export default function CategorySection() {
         </div>
 
         {/* Categories Horizontal Scroll / Grid */}
-        <div className="flex overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 pb-4">
+        <div className="flex overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0 gap-4 sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 pb-4">
           {categories.map((category) => (
             <Link 
               key={category.id} 
@@ -27,7 +27,7 @@ export default function CategorySection() {
               prefetch={false}
               className="group flex flex-col items-center min-w-[120px] sm:min-w-0"
             >
-              <div className="relative w-24 h-24 sm:w-full sm:aspect-square mb-4 rounded-full overflow-hidden border-4 border-gray-50 shadow-md group-hover:border-brand-yellow group-hover:shadow-brand-yellow/20 transition-all duration-300 group-hover:-translate-y-2">
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 mb-4 rounded-full overflow-hidden border-4 border-gray-50 shadow-md group-hover:border-brand-yellow group-hover:shadow-brand-yellow/20 transition-all duration-300 group-hover:-translate-y-2">
                 <Image 
                   src={category.image}
                   alt={category.name}

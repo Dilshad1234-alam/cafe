@@ -25,7 +25,7 @@ export default function OurStory() {
             </div>
             
             {/* Floating Info Tag */}
-            <div className="absolute -bottom-6 -right-6 bg-brand-charcoal text-white font-bold px-8 py-6 rounded-2xl shadow-2xl z-30 flex flex-col items-center">
+            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 bg-brand-charcoal text-white font-bold px-6 py-4 sm:px-8 sm:py-6 rounded-2xl shadow-2xl z-30 flex flex-col items-center">
               <span className="text-3xl font-serif text-brand-yellow">100%</span>
               <span className="text-sm tracking-wider uppercase mt-1">Fresh Food</span>
             </div>

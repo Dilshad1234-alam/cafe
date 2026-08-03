@@ -6,7 +6,7 @@ import { Tag } from "lucide-react";
 export default function OffersSection() {
   return (
     <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
         
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>

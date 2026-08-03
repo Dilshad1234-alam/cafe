@@ -1,15 +1,26 @@
 "use client";
+import { useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
 import { Plus, Star, Info, Clock } from "lucide-react";
 import { useCartStore } from "@/frontend/store/cartStore";
+import { useAuth } from "@/frontend/hooks/useAuth";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function ProductCard({ product }) {
   const addItem = useCartStore((state) => state.addItem);
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      router.push("/login");
+      return;
+    }
     // Determine default config
     const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes[0] : null;
     
@@ -26,17 +37,19 @@ export default function ProductCard({ product }) {
     ? Math.round(((product.originalPrice - product.salePrice) / product.originalPrice) * 100) 
     : 0;
 
+  const [imgSrc, setImgSrc] = useState(product.image || "/images/placeholder.svg");
+
   return (
     <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 group flex flex-col h-full">
       {/* Image Container */}
-      <div className="relative h-48 w-full overflow-hidden bg-gray-50">
+      <div className="relative h-48 w-full overflow-hidden bg-gray-50 flex items-center justify-center">
         <Image 
-          src={product.image}
+          src={imgSrc}
           alt={product.name}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          unoptimized
+          onError={() => setImgSrc("/images/placeholder.svg")}
         />
         
         {/* Badges */}

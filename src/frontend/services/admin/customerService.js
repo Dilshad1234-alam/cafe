@@ -5,8 +5,8 @@ export async function fetchAdminCustomers(params = {}) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();
@@ -26,8 +26,8 @@ export async function fetchAdminCustomerDetails(id) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();
@@ -47,8 +47,8 @@ export async function updateAdminCustomerStatus(id, isActive) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify({ isActive }),
   });
 

@@ -28,7 +28,7 @@ export default function WhyChooseUs() {
     <section className="py-20 bg-brand-charcoal text-brand-cream relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200')] opacity-[0.03] bg-cover bg-center pointer-events-none"></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
         
         <div className="text-center mb-16">
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-brand-yellow mb-4">Why Choose Us?</h2>

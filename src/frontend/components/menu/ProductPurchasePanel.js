@@ -9,10 +9,12 @@ import AddOnSelector from "./AddOnSelector";
 import QuantitySelector from "./QuantitySelector";
 import { ShoppingBag, CreditCard } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "@/frontend/hooks/useAuth";
 
 export default function ProductPurchasePanel({ product }) {
   const router = useRouter();
   const addItem = useCartStore(state => state.addItem);
+  const { isAuthenticated } = useAuth();
 
   // Initialize state
   const defaultSize = product.sizes?.length > 0 ? product.sizes[0] : null;
@@ -44,11 +46,21 @@ export default function ProductPurchasePanel({ product }) {
   });
 
   const handleAddToCart = () => {
+    if (!isAuthenticated) {
+      toast.info("Please login to add items to cart.");
+      router.push("/login");
+      return;
+    }
     addItem(product, quantity, getCartConfig());
     toast.success(`${quantity} x ${product.name} added to cart`);
   };
 
   const handleBuyNow = () => {
+    if (!isAuthenticated) {
+      toast.info("Please login to buy items.");
+      router.push("/login");
+      return;
+    }
     addItem(product, quantity, getCartConfig());
     // In Tasty Zone, if a cart page exists we go there, else stay or go checkout
     // We will push to /checkout if it existed, otherwise just add to cart and open it

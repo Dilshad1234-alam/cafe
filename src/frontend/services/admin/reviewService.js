@@ -5,8 +5,8 @@ export async function fetchAdminReviews(params = {}) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();
@@ -26,8 +26,8 @@ export async function fetchAdminReview(id) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();
@@ -47,8 +47,8 @@ export async function moderateAdminReview(id, status, adminNote) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
     body: JSON.stringify({ status, adminNote }),
   });
 
@@ -72,8 +72,8 @@ export async function deleteAdminReview(id) {
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
-    credentials: "include",
   });
 
   const data = await res.json();

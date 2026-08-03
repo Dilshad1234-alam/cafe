@@ -1,10 +1,11 @@
+import Image from "next/image";
 import { reviews } from "@/frontend/data/reviews";
 import { Star, Quote } from "lucide-react";
 
 export default function ReviewsSection() {
   return (
     <section className="py-20 bg-brand-cream">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-12 xl:px-20">
         
         <div className="text-center mb-16">
           <h2 className="font-serif text-3xl md:text-5xl font-bold text-brand-charcoal mb-4">What Our Customers Say</h2>
@@ -35,9 +36,22 @@ export default function ReviewsSection() {
               </p>
               
               <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-50">
-                <div className="w-10 h-10 rounded-full bg-brand-yellow/20 flex items-center justify-center font-bold text-brand-charcoal">
-                  {review.initials}
-                </div>
+                {review.image ? (
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <Image 
+                      src={review.image} 
+                      alt={review.name} 
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                      unoptimized
+                    />
+                  </div>
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-brand-yellow/20 flex items-center justify-center font-bold text-brand-charcoal flex-shrink-0">
+                    {review.initials}
+                  </div>
+                )}
                 <div>
                   <h4 className="font-bold text-sm text-brand-charcoal">{review.name}</h4>
                   <p className="text-xs text-brand-red font-medium">Ordered: {review.orderItem}</p>

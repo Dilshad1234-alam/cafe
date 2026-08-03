@@ -19,6 +19,7 @@ export async function loginUser(data) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
     },
     body: JSON.stringify(data),
   });
@@ -27,24 +28,34 @@ export async function loginUser(data) {
   if (!response.ok) {
     throw result;
   }
+  if (result.token) {
+    if (typeof window !== "undefined") sessionStorage.setItem("token", result.token);
+  }
   return result;
 }
 
 export async function logoutUser() {
   const response = await fetch("/api/auth/logout", {
     method: "POST",
+    headers: {
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
+    },
   });
 
   const result = await response.json();
   if (!response.ok) {
     throw result;
   }
+  if (typeof window !== "undefined") sessionStorage.removeItem("token");
   return result;
 }
 
 export async function fetchCurrentUser() {
   const response = await fetch("/api/auth/me", {
     method: "GET",
+    headers: {
+      "Authorization": `Bearer ${typeof window !== "undefined" ? sessionStorage.getItem("token") || "" : ""}`,
+    },
   });
 
   const result = await response.json();
