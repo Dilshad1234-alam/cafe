@@ -16,7 +16,9 @@ export default async function MenuPage() {
   const categoriesDb = await Category.find({ isActive: true }).sort("sortOrder").lean();
   
   // Map categories for UI
-  const categories = categoriesDb.map(c => ({
+  const categories = categoriesDb
+    .filter(c => !['maggi', 'biryani'].includes(c.slug.toLowerCase()) && !c.name.toLowerCase().includes('maggi') && !c.name.toLowerCase().includes('biryani'))
+    .map(c => ({
     id: c._id.toString(),
     slug: c.slug,
     name: c.name,
@@ -27,7 +29,13 @@ export default async function MenuPage() {
   const productsDb = await MenuItem.find({ isAvailable: true }).lean();
 
   // Map products for UI (maintaining backward compatibility with existing mock structure)
-  const products = productsDb.map(p => {
+  const products = productsDb
+    .filter(p => {
+      const isMaggi = p.category?.toString().toLowerCase().includes('maggi') || p.slug.toLowerCase().includes('maggi') || p.name.toLowerCase().includes('maggi');
+      const isBiryani = p.category?.toString().toLowerCase().includes('biryani') || p.slug.toLowerCase().includes('biryani') || p.name.toLowerCase().includes('biryani');
+      return !isMaggi && !isBiryani;
+    })
+    .map(p => {
     // Determine category slug (fallback if category field is somehow missing or different)
     let catSlug = p.category;
     if (p.category?.toString().match(/^[0-9a-fA-F]{24}$/)) {

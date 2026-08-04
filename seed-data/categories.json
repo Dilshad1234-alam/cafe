@@ -48,14 +48,6 @@
     "isActive": true
   },
   {
-    "name": "Maggi",
-    "slug": "maggi",
-    "description": "Everyone's favorite noodles.",
-    "image": "/images/categories/maggi.jpg",
-    "sortOrder": 7,
-    "isActive": true
-  },
-  {
     "name": "Wraps",
     "slug": "wraps",
     "description": "Flavorful wraps and rolls.",

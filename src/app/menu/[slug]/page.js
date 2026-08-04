@@ -1,51 +1,93 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, ArrowLeft } from "lucide-react";
-import { menuProducts } from "@/frontend/data/menuProducts";
 import ProductGallery from "@/frontend/components/menu/ProductGallery";
 import ProductInfo from "@/frontend/components/menu/ProductInfo";
 import ProductPurchasePanel from "@/frontend/components/menu/ProductPurchasePanel";
 import RelatedProducts from "@/frontend/components/menu/RelatedProducts";
 import { getDiscountPercentage } from "@/frontend/utils/productPricing";
+import connectDB from "@/backend/config/db";
+import MenuItem from "@/backend/models/MenuItem";
+import Category from "@/backend/models/Category";
+
+// Helper function to map DB product to UI format
+function mapProductForUI(p, categoriesDb) {
+  let catSlug = p.category;
+  if (p.category?.toString().match(/^[0-9a-fA-F]{24}$/)) {
+    const foundCat = categoriesDb.find(c => c._id.toString() === p.category.toString());
+    if (foundCat) catSlug = foundCat.slug;
+  }
+  return {
+    id: p._id.toString(),
+    name: p.name,
+    slug: p.slug,
+    price: p.salePrice || p.basePrice || p.price || 0,
+    originalPrice: p.basePrice || p.price || 0,
+    salePrice: p.salePrice || null,
+    description: p.description || "",
+    shortDescription: p.shortDescription || p.description?.substring(0, 100) || "",
+    category: catSlug,
+    foodType: p.foodType || "veg",
+    image: p.imageUrl || (p.images && p.images[0]) || "",
+    images: p.images || (p.imageUrl ? [p.imageUrl] : []),
+    isPopular: p.isFeatured || false,
+    rating: p.averageRating || 4.5,
+    reviewCount: p.reviewCount || 0,
+    ingredients: p.ingredients || [],
+    tags: p.tags || [],
+    sizes: p.sizes || [],
+    addOns: p.addOns || [],
+    isAvailable: p.isAvailable,
+    preparationTime: p.preparationTime || "15 min"
+  };
+}
 
 // Dynamic metadata for SEO
 export async function generateMetadata({ params }) {
-  // Await params as required by Next.js in some contexts, but not strictly needed here if we destructure
-  // Next 15+ may require `await params` but we're on Next 16. App Router params are often Promises in new versions.
-  // To be safe against Next.js breaking changes, we'll assume it's synchronous or we can await it if needed.
-  // Let's use `const resolvedParams = await params;` if the user's setup enforces it, but standard is fine.
+  const resolvedParams = await params;
+  await connectDB();
   
-  const product = menuProducts.find(p => p.slug === params.slug);
+  const dbProduct = await MenuItem.findOne({ slug: resolvedParams.slug }).lean();
   
-  if (!product) {
+  if (!dbProduct) {
     return {
       title: "Product Not Found | The Tasty Zone",
     };
   }
 
   return {
-    title: `${product.name} | The Tasty Zone`,
-    description: product.description,
+    title: `${dbProduct.name} | The Tasty Zone`,
+    description: dbProduct.description || dbProduct.shortDescription,
     openGraph: {
-      title: `${product.name} | The Tasty Zone`,
-      description: product.description,
-      images: [{ url: product.image }],
+      title: `${dbProduct.name} | The Tasty Zone`,
+      description: dbProduct.description || dbProduct.shortDescription,
+      images: [{ url: dbProduct.imageUrl || (dbProduct.images && dbProduct.images[0]) || "" }],
     }
   };
 }
 
-export default function ProductDetailsPage({ params }) {
-  const { slug } = params;
-  const product = menuProducts.find(p => p.slug === slug);
+export default async function ProductDetailsPage({ params }) {
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
+  
+  await connectDB();
+  const dbProduct = await MenuItem.findOne({ slug }).lean();
 
-  if (!product) {
+  if (!dbProduct) {
     notFound();
   }
 
+  const categoriesDb = await Category.find({ isActive: true }).lean();
+  const product = mapProductForUI(dbProduct, categoriesDb);
+
   // Find related products (same category, exclude current, limit 4, available only)
-  const relatedProducts = menuProducts
-    .filter(p => p.category === product.category && p.id !== product.id && p.isAvailable)
-    .slice(0, 4);
+  const relatedDbProducts = await MenuItem.find({ 
+    category: dbProduct.category, 
+    _id: { $ne: dbProduct._id },
+    isAvailable: true 
+  }).limit(4).lean();
+
+  const relatedProducts = relatedDbProducts.map(p => mapProductForUI(p, categoriesDb));
 
   const discount = getDiscountPercentage(product.originalPrice, product.salePrice);
 

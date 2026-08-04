@@ -62,13 +62,9 @@ export default function ProductPurchasePanel({ product }) {
       return;
     }
     addItem(product, quantity, getCartConfig());
-    // In Tasty Zone, if a cart page exists we go there, else stay or go checkout
-    // We will push to /checkout if it existed, otherwise just add to cart and open it
-    toast.success(`${quantity} x ${product.name} added to cart`);
     
-    // For now, if we have a cart page, router.push('/cart').
-    // Since we didn't see a cart page earlier in list_dir, we might just stay and rely on navbar cart.
-    // If a checkout page is available, navigate there.
+    // Redirect to checkout page directly
+    router.push('/checkout');
   };
 
   // If not available, render disabled state
