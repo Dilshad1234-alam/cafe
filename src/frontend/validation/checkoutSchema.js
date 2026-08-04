@@ -28,10 +28,17 @@ export const checkoutSchema = z.object({
     })
     .optional()
     .nullable(),
-  paymentMethod: z.enum(["cash_on_delivery", "pay_at_pickup"]),
+  paymentMethod: z.enum(["cash_on_delivery", "pay_at_pickup", "razorpay"]),
 }).superRefine((data, ctx) => {
   // If delivery is selected, deliveryAddress is absolutely required
   if (data.orderType === "delivery") {
+    if (data.paymentMethod === "pay_at_pickup") {
+      ctx.addIssue({
+        path: ["paymentMethod"],
+        message: "Pay at Pickup is not available for delivery orders",
+        code: z.ZodIssueCode.custom,
+      });
+    }
     if (!data.deliveryAddress || !data.deliveryAddress.house) {
       ctx.addIssue({
         path: ["deliveryAddress", "house"],
@@ -64,6 +71,14 @@ export const checkoutSchema = z.object({
       ctx.addIssue({
         path: ["deliveryAddress", "pincode"],
         message: "Valid 6-digit pincode is required for delivery",
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  } else if (data.orderType === "takeaway") {
+    if (data.paymentMethod === "cash_on_delivery") {
+      ctx.addIssue({
+        path: ["paymentMethod"],
+        message: "Cash on Delivery is not available for takeaway orders",
         code: z.ZodIssueCode.custom,
       });
     }

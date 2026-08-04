@@ -19,6 +19,7 @@ import OrderTypeSelector from "./OrderTypeSelector";
 import DeliveryAddressForm from "./DeliveryAddressForm";
 import PaymentMethodSelector from "./PaymentMethodSelector";
 import CheckoutOrderSummary from "./CheckoutOrderSummary";
+import { useRazorpayCheckout } from "@/frontend/hooks/useRazorpayCheckout";
 
 export default function CheckoutForm() {
   const router = useRouter();
@@ -38,6 +39,7 @@ export default function CheckoutForm() {
 
   const { settings } = useSettingsStore();
   const defaultOrderType = settings?.ordering?.deliveryEnabled === false ? "takeaway" : "delivery";
+  const { initiateRazorpayPayment, isPaymentLoading } = useRazorpayCheckout();
 
   // React Hook Form Setup
   const {
@@ -70,15 +72,16 @@ export default function CheckoutForm() {
   });
 
   const currentOrderType = watch("orderType");
+  const currentPaymentMethod = watch("paymentMethod");
 
-  // Sync Payment Method with Order Type automatically
+  // Sync Payment Method with Order Type automatically ONLY IF invalid combination
   useEffect(() => {
-    if (currentOrderType === "delivery") {
+    if (currentOrderType === "delivery" && currentPaymentMethod === "pay_at_pickup") {
       setValue("paymentMethod", "cash_on_delivery");
-    } else {
+    } else if (currentOrderType === "takeaway" && currentPaymentMethod === "cash_on_delivery") {
       setValue("paymentMethod", "pay_at_pickup");
     }
-  }, [currentOrderType, setValue]);
+  }, [currentOrderType, currentPaymentMethod, setValue]);
 
   // Pre-fill user data if logged in
   useEffect(() => {
@@ -110,6 +113,8 @@ export default function CheckoutForm() {
     // Construct the normalized order shape
     const orderPayload = {
       ...data,
+      // Map razorpay to online for backend compatibility
+      paymentMethod: data.paymentMethod === "razorpay" ? "online" : data.paymentMethod,
       // If takeaway, strip the delivery address completely
       deliveryAddress: data.orderType === "takeaway" ? null : data.deliveryAddress,
       items: items.map(item => ({
@@ -128,6 +133,17 @@ export default function CheckoutForm() {
     try {
       const response = await createOrder(orderPayload);
       
+      // If Razorpay, initiate payment popup
+      if (data.paymentMethod === "razorpay") {
+        await initiateRazorpayPayment(
+          response.order.orderNumber, 
+          data.customer, 
+          response.guestAccessToken
+        );
+        return; // Stop here, don't clear cart or redirect
+      }
+
+      // Otherwise, standard COD/Pickup flow
       toast.success(response.message || "Order placed successfully!");
       
       // Clear cart only on success
@@ -208,7 +224,9 @@ export default function CheckoutForm() {
           items={items}
           subtotal={subtotal}
           isSubmitting={isSubmitting}
+          isPaymentLoading={isPaymentLoading}
           orderType={currentOrderType}
+          paymentMethod={currentPaymentMethod}
         />
       </div>
 

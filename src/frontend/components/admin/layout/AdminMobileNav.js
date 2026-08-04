@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
   Menu, X, LayoutDashboard, Pizza, FolderTree, ShoppingBag, 
-  Users, Ticket, Star, Settings, ExternalLink 
+  Users, Ticket, Star, Settings, ExternalLink, CreditCard
 } from 'lucide-react';
 
 const navLinks = [
@@ -13,6 +13,7 @@ const navLinks = [
   { href: '/admin/products', label: 'Products', icon: Pizza },
   { href: '/admin/categories', label: 'Categories', icon: FolderTree },
   { href: '/admin/orders', label: 'Orders', icon: ShoppingBag },
+  { href: '/admin/payments', label: 'Payments', icon: CreditCard },
   { href: '/admin/customers', label: 'Customers', icon: Users },
   { href: '/admin/coupons', label: 'Coupons', icon: Ticket },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },

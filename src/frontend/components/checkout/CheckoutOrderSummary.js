@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Edit2, Loader2 } from "lucide-react";
 import { useSettingsStore } from "@/frontend/store/settingsStore";
 
-export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, orderType }) {
+export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, isPaymentLoading, orderType, paymentMethod }) {
   const { settings } = useSettingsStore();
   
   // Frontend calculated total
@@ -21,6 +21,23 @@ export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, or
   const taxAmount = (subtotal * taxPercentage) / 100;
   
   const grandTotal = subtotal + actualDeliveryFee + taxAmount;
+
+  // Determine button state
+  const isButtonDisabled = isSubmitting || isPaymentLoading;
+  
+  // Determine button text
+  const getButtonText = () => {
+    if (isPaymentLoading) return "Opening Secure Payment...";
+    if (isSubmitting) return "Processing...";
+    
+    if (paymentMethod === "razorpay") {
+      return "Pay Securely Online";
+    } else if (orderType === "delivery") {
+      return "Place Cash on Delivery Order";
+    } else {
+      return "Confirm Pickup Order";
+    }
+  };
 
   return (
     <div className="bg-brand-charcoal text-white rounded-[2rem] p-6 sm:p-8 shadow-xl sticky top-24">
@@ -109,17 +126,11 @@ export default function CheckoutOrderSummary({ items, subtotal, isSubmitting, or
       <button 
         type="submit"
         form="checkout-form"
-        disabled={isSubmitting}
+        disabled={isButtonDisabled}
         className="w-full py-4 bg-brand-yellow text-brand-charcoal rounded-xl font-bold text-lg hover:bg-[#E5A800] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed shadow-xl shadow-brand-yellow/20"
       >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="w-5 h-5 animate-spin" />
-            Processing...
-          </>
-        ) : (
-          orderType === "delivery" ? "Continue with Cash on Delivery" : "Confirm Pickup Details"
-        )}
+        {isButtonDisabled && <Loader2 className="w-5 h-5 animate-spin" />}
+        {getButtonText()}
       </button>
 
     </div>

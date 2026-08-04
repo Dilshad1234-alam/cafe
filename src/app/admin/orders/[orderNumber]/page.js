@@ -93,14 +93,27 @@ export default function AdminOrderDetailsPage() {
             </div>
           </div>
           
-          <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0">
+            <Link 
+              href={`/account/orders/${order.orderNumber}/invoice`}
+              className="flex-1 sm:flex-none px-4 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-bold rounded-xl transition-colors text-center"
+            >
+              View Receipt
+            </Link>
+            <Link 
+              href={`/admin/payments/${order._id}`}
+              className="flex-1 sm:flex-none px-4 py-2 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 text-sm font-bold rounded-xl transition-colors text-center"
+            >
+              View Payment
+            </Link>
+            
             {order.orderStatus !== 'cancelled' && order.orderStatus !== 'delivered' && (
               <button 
                 onClick={() => setShowCancelDialog(true)}
                 className="flex-1 sm:flex-none px-4 py-2 border border-brand-red text-brand-red bg-white hover:bg-red-50 text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2"
               >
                 <AlertCircle className="w-4 h-4" />
-                Cancel Order
+                Cancel
               </button>
             )}
             
@@ -110,7 +123,7 @@ export default function AdminOrderDetailsPage() {
                 className="flex-1 sm:flex-none px-4 py-2 bg-brand-charcoal hover:bg-gray-900 text-white text-sm font-bold rounded-xl transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
                 <Edit2 className="w-4 h-4" />
-                Update Status
+                Status
               </button>
             )}
           </div>

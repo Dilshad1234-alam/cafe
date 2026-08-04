@@ -72,7 +72,12 @@ export default function OrderSuccessPage({ params }) {
               ✓
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Confirmed!</h1>
-            <p className="text-green-800 font-medium">Your order has been received and is awaiting confirmation.</p>
+            
+            {order.paymentMethod === 'online' && order.paymentStatus === 'paid' ? (
+              <p className="text-green-800 font-medium">Your payment has been verified and your order has been received.</p>
+            ) : (
+              <p className="text-green-800 font-medium">Your order has been received and is awaiting confirmation.</p>
+            )}
           </div>
 
           {/* Order Details */}
@@ -118,10 +123,10 @@ export default function OrderSuccessPage({ params }) {
                 <p className="mb-2">
                   <span className="text-gray-500 mr-2">Method:</span>
                   <span className="font-semibold capitalize text-gray-900">
-                    {order.paymentMethod.replace(/_/g, " ")}
+                    {order.paymentMethod === 'online' ? 'Online Payment' : order.paymentMethod.replace(/_/g, " ")}
                   </span>
                 </p>
-                <p>
+                <p className="mb-2">
                   <span className="text-gray-500 mr-2">Status:</span>
                   <span className={`font-semibold capitalize px-2 py-1 rounded text-sm ${
                     order.paymentStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
@@ -129,6 +134,14 @@ export default function OrderSuccessPage({ params }) {
                     {order.paymentStatus}
                   </span>
                 </p>
+                {order.paymentMethod === 'online' && order.paymentStatus === 'paid' && order.razorpay?.paymentId && (
+                  <p>
+                    <span className="text-gray-500 mr-2">Payment ID:</span>
+                    <span className="font-mono text-sm text-gray-900">
+                      {order.razorpay.paymentId.replace(/^pay_/, "pay_****")}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
 
@@ -178,29 +191,27 @@ export default function OrderSuccessPage({ params }) {
           </div>
           
           {/* Actions */}
-          <div className="p-8 bg-gray-50 flex flex-col sm:flex-row gap-4 border-t border-gray-100">
+          <div className="p-8 bg-gray-50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-gray-100">
             <Link 
-              href="/" 
-              className="flex-1 text-center py-4 bg-white border-2 border-brand-charcoal text-brand-charcoal rounded-xl font-bold hover:bg-gray-50 transition-colors"
+              href={`/account/orders/${order.orderNumber}/invoice${guestToken ? `?guestToken=${guestToken}` : ''}`}
+              className="w-full text-center py-4 bg-gray-900 text-white rounded-xl font-bold hover:bg-gray-800 transition-colors"
             >
-              Continue Shopping
+              View Receipt
             </Link>
             {isAuthenticated && (
               <Link 
                 href="/account/orders" 
-                className="flex-1 text-center py-4 bg-brand-charcoal text-white rounded-xl font-bold hover:bg-gray-800 transition-colors"
+                className="w-full text-center py-4 bg-white border border-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-colors"
               >
                 My Orders
               </Link>
             )}
-            <a 
-              href={`https://wa.me/91XXXXXXXXXX?text=Hi, I have a question about my order ${order.orderNumber}`} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex-1 text-center py-4 bg-[#25D366] text-white rounded-xl font-bold hover:bg-[#128C7E] transition-colors"
+            <Link 
+              href="/" 
+              className="w-full text-center py-4 bg-white border border-gray-200 text-brand-charcoal rounded-xl font-bold hover:bg-gray-50 transition-colors"
             >
-              WhatsApp Support
-            </a>
+              Continue Shopping
+            </Link>
           </div>
         </div>
       </div>

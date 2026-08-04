@@ -88,13 +88,22 @@ export default function OrderCard({ order }) {
             </p>
           </div>
           
-          <Link 
-            href={`/account/orders/${orderNumber}`}
-            className="w-full lg:w-auto px-6 py-3 bg-white border border-gray-200 text-brand-charcoal rounded-xl font-bold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-          >
-            View Details
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="flex flex-col sm:flex-row lg:flex-col w-full lg:w-auto gap-2 mt-4 lg:mt-0">
+            <Link 
+              href={`/account/orders/${orderNumber}/invoice`}
+              className="w-full sm:flex-1 lg:w-full px-6 py-3 bg-brand-charcoal text-white rounded-xl font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+            >
+              <Receipt className="w-4 h-4" />
+              Receipt
+            </Link>
+            <Link 
+              href={`/account/orders/${orderNumber}`}
+              className="w-full sm:flex-1 lg:w-full px-6 py-3 bg-white border border-gray-200 text-brand-charcoal rounded-xl font-bold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+            >
+              View Details
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         </div>
         
       </div>

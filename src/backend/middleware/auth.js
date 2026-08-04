@@ -8,13 +8,16 @@ import { getUserById, sanitizeUser } from "@/backend/services/authService";
 export async function getAuthenticatedUser() {
   const headersList = await headers();
   const authHeader = headersList.get("authorization");
-  
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return null;
+  let token = null;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.substring(7);
+  } else {
+    // Fallback to cookie
+    const cookieStore = await cookies();
+    token = cookieStore.get(AUTH_COOKIE_NAME)?.value;
   }
-  
-  const token = authHeader.substring(7);
-  
+
   if (!token) {
     return null;
   }

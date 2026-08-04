@@ -108,7 +108,16 @@ const OrderSchema = new mongoose.Schema(
         note: { type: String },
         changedBy: { type: String },
       }
-    ]
+    ],
+    razorpay: {
+      orderId: { type: String, default: null, index: true },
+      paymentId: { type: String, default: null },
+      signature: { type: String, default: null },
+      amount: { type: Number, default: null },
+      currency: { type: String, default: "INR" },
+      status: { type: String, default: null },
+      createdAt: { type: Date, default: null }
+    }
   },
   { timestamps: true }
 );

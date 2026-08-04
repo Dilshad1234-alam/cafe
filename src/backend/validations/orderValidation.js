@@ -3,7 +3,7 @@ import { z } from "zod";
 export const createOrderSchema = z.object({
   customer: z.object({
     fullName: z.string().min(2, "Name must be at least 2 characters"),
-    phone: z.string().regex(/^[6-9]\d{9}$/, "Must be a valid 10-digit Indian mobile number"),
+    phone: z.string().regex(/^[0-9]{10}$/, "Must be a valid 10-digit mobile number"),
     email: z.string().email("Invalid email address").optional().or(z.literal("")),
   }),
   orderType: z.enum(["delivery", "takeaway"]),
@@ -35,18 +35,18 @@ export const createOrderSchema = z.object({
         path: ["deliveryAddress"],
       });
     }
-    if (data.paymentMethod !== "cash_on_delivery") {
+    if (data.paymentMethod !== "cash_on_delivery" && data.paymentMethod !== "online") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Delivery orders must use cash_on_delivery for now",
+        message: "Delivery orders must use cash_on_delivery or online payment",
         path: ["paymentMethod"],
       });
     }
   } else if (data.orderType === "takeaway") {
-    if (data.paymentMethod !== "pay_at_pickup") {
+    if (data.paymentMethod !== "pay_at_pickup" && data.paymentMethod !== "online") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Takeaway orders must use pay_at_pickup for now",
+        message: "Takeaway orders must use pay_at_pickup or online payment",
         path: ["paymentMethod"],
       });
     }

@@ -12,8 +12,9 @@ export const createOrderController = async (request) => {
     // 1. Validation
     const parseResult = createOrderSchema.safeParse(body);
     if (!parseResult.success) {
+      const errorDetails = parseResult.error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
       return NextResponse.json(
-        { success: false, message: "Validation failed", errors: parseResult.error.errors },
+        { success: false, message: `Validation failed: ${errorDetails}`, errors: parseResult.error.errors },
         { status: 400 }
       );
     }
