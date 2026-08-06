@@ -54,7 +54,7 @@ export default function Navbar() {
       await logout();
       setIsMobileMenuOpen(false);
       setIsProfileDropdownOpen(false);
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       console.error("Logout failed", error);
     }
